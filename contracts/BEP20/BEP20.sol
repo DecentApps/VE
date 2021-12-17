@@ -24,7 +24,7 @@ contract BEP20 is IBEP20 {
         _name = "Virtual Economy Coin";
         _symbol = "VEC";
         _decimals = 8;
-        _totalSupply = 10**9;
+        _totalSupply = 10**(9 + 8);
         _balances[msg.sender] = _totalSupply;
     }
 
