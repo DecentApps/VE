@@ -20,7 +20,7 @@ describe("VEC smart contract", function () {
     expect(await vec.totalSupply()).to.equal(expectedSupply);
     expect(await vec.balanceOf(deployer)).to.equal(expectedSupply);
 
-    console.log("Cunstructor was successful");
+    console.log("Constructor was successful");
 
     /* check token transfering */
     const receiver = accounts[1].address;
@@ -35,7 +35,7 @@ describe("VEC smart contract", function () {
       console.log(`Transfer completed. Hash: ${transferTx.hash}`);
       const transferedAmount = await vec.balanceOf(receiver);
       console.log(
-        `Receivers balance is ${transferedAmount / 10 ** decimals} ${symbol}`
+        `Receiver's balance is ${transferedAmount / 10 ** decimals} ${symbol}`
       );
 
       expect(transferedAmount).to.equal(amount);
