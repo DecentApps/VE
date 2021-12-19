@@ -34,18 +34,18 @@ module.exports = {
     bscMainnet: {
       chainId: 56,
       url: "https://bsc-dataseed.binance.org/",
-      accounts: [`0x${M_ISSUER_KEY}`, `0x${M_TESTER_KEY}`],
-      from: `0x${M_ISSUER_KEY}`,
+      accounts: [`0x${process.env.M_ISSUER_KEY}`, `0x${process.env.M_TESTER_KEY}`],
+      from: `0x${process.env.M_ISSUER_KEY}`,
       gas: 2100000,
       gasPrice: 8000000000,
     },
     bscTestnet: {
       chainId: 97,
       url: "https://data-seed-prebsc-1-s1.binance.org:8545/",
-      accounts: [`0x${T_ISSUER_KEY}`, `0x${T_TESTER_KEY}`],
-      from: `0x${T_ISSUER_KEY}`,
+      accounts: [`0x${process.env.T_ISSUER_KEY}`, `0x${process.env.T_TESTER_KEY}`],
+      from: `0x${process.env.T_ISSUER_KEY}`,
       gas: 2100000,
-      gasPrice: 8000000000,
+      gasPrice: 10000000000,
     },
   },
 };

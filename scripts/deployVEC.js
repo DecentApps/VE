@@ -4,6 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 const hre = require("hardhat");
+require("dotenv").config();
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -13,13 +14,16 @@ async function main() {
   // manually to make sure everything is compiled
   // await hre.run('compile');
 
+  const NETWORK = process.env.NETWORK;
+
+  console.log(`Deploying VEC on network ${NETWORK}`);
   // We get the contract to deploy
   const bep20 = await hre.ethers.getContractFactory("BEP20");
-  const vec = await bep20.deploy();
 
+  const vec = await bep20.deploy();
   await vec.deployed();
 
-  console.log("VEC deployed to address ", vec.address);
+  console.log(`VEC deployed to address ${vec.address} from ${bep20.signer.address}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
