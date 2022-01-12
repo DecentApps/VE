@@ -1,13 +1,15 @@
 const { expect, assert } = require("chai");
 const { ethers } = require("hardhat");
+require("dotenv").config();
 
 describe("VEC smart contract", function () {
   it("Checking VEC contract functionality", async function () {
     const accounts = await hre.ethers.getSigners();
     const bep20 = await ethers.getContractFactory("BEP20");
-    const vec = await bep20.deploy();
-    await vec.deployed();
-    const deployer = vec.deployTransaction.from;
+    const CONTRACT_ADDR = process.env.VEC_ADDR;
+
+    const vec = await bep20.attach("0x" + CONTRACT_ADDR);
+    const deployer = vec.signer.address;
     const symbol = await vec.symbol();
     const decimals = await vec.decimals();
 
