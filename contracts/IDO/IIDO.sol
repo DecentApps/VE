@@ -11,11 +11,10 @@ interface IIDO {
      * @notice withdraw native coin
      * @notice owner only
      */
-    Withdraw(uint256) external;
-
+    function withdraw(uint256) external;
 
     /* Permissionless functions */
-    
+
     /**
      * @notice total native coins received
      */
@@ -57,11 +56,10 @@ interface IIDO {
     /**
      * @notice returns how many native coins received and how many tokens sent out
      */
-    event Exchanged(uint256 value, uint256 value);
+    event Exchanged(uint256 coins, uint256 tokens);
 
     /**
      * @notice native coin withdrawal
      */
-    event Withdrawn(uint256 value);
-
+    event Withdrawn(uint256 coins);
 }
