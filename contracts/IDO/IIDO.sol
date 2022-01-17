@@ -28,7 +28,7 @@ interface IIDO {
     /**
      * @notice fixed rate between stablecoin and native coin
      */
-    function getFixedRate(address account) external view returns (uint256);
+    function getFixedRate(address) external view returns (uint256);
 
     /**
      * @notice returns the stablecoin address
