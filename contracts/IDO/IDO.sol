@@ -27,19 +27,81 @@ contract IDO is IIDO {
         _ratio = __ratio;
     }
 
-    function getCurrentRate() external view override returns (uint256) {}
+    /**
+     * @notice returns the current exchange rate using pancake swap (onchain oracle)
+     * @param _pool - address pool at pancake
+     * @return exRate - exchange rate between native coin and token
+     */
+    function getCurrentRate(address _pool)
+        external
+        view
+        override
+        returns (uint256 exRate)
+    {}
 
-    function getFixedRate(address) external view override returns (uint256) {}
+    /**
+     * @notice returns the fixed ratio for IDO (stablecoin to token)
+     * @return offeringRate - IDO rate between token and stablecoin
+     */
+    function getFixedRate()
+        external
+        view
+        override
+        returns (uint256 offeringRate)
+    {}
 
-    function getInitialOffered() external view override returns (uint256) {}
+    /**
+     * @notice returns the fixed ratio for IDO (stablecoin to token)
+     * @return offeringRatio - the amount of total deposited IDO tokens (maximum offered)
+     */
+    function getInitialOffered()
+        external
+        view
+        override
+        returns (uint256 offeringRatio)
+    {}
 
-    function getStablecoinAddress() external view override returns (address) {}
+    /**
+     * @return stablecoin - returns the stable coin address
+     */
+    function getStablecoinAddress()
+        external
+        view
+        override
+        returns (address stablecoin)
+    {}
 
-    function getTokenAddress() external view override returns (address) {}
+    /**
+     * @return token - returns the token address
+     */
+    function getTokenAddress() external view override returns (address token) {}
 
-    function totalInNative() external view override returns (uint256) {}
+    /**
+     * @return totalCoins - returns the amount of native coins that exchanged so far
+     * @notice Emits a {Withdrawn} event.
+     */
+    function totalInNative()
+        external
+        view
+        override
+        returns (uint256 totalCoins)
+    {}
 
-    function totalOut() external view override returns (uint256) {}
+    /**
+     * @return totalTokens - returns the amount of the token that was bought so far
+     */
+    function totalOut() external view override returns (uint256 totalTokens) {}
 
-    function withdraw(uint256) external override {}
+    /**
+     * @notice owner only - transfer native coins to owner's wallet
+     * @param _amount - how many native coins to withdraw. On zero , retrieve all avariable coins
+     * @notice Emits a {Exchanged} event.
+     */
+    function withdraw(uint256 _amount) external override {}
+
+    /**
+     * @notice directly accept deposit in native coins. Exchange it to tokens and return them to sender's address
+     * @notice that way a fornt end client is not necessary for investors. They can use their favourite wallet
+     */
+    receive() external override payable {}
 }

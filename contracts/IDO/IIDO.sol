@@ -26,9 +26,9 @@ interface IIDO {
     function totalOut() external view returns (uint256);
 
     /**
-     * @notice fixed rate between stablecoin and native coin
+     * @notice fixed rate between stablecoin and IDO token
      */
-    function getFixedRate(address) external view returns (uint256);
+    function getFixedRate() external view returns (uint256);
 
     /**
      * @notice returns the stablecoin address
@@ -49,7 +49,12 @@ interface IIDO {
      * @notice returns the current ratio between the native coin and the token
      * @notice uses onchain oracle for that
      */
-    function getCurrentRate() external view returns (uint256);
+    function getCurrentRate(address) external view returns (uint256);
+
+    /**
+     * @notice special recieve function to accept the native coin
+     */
+    receive() external payable;
 
     /* Events */
 
