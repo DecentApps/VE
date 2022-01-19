@@ -48,7 +48,9 @@ contract IDO is IIDO {
         view
         override
         returns (uint256 offeringRate)
-    {}
+    {
+        return _ratio;
+    }
 
     /**
      * @notice returns the fixed ratio for IDO (stablecoin to token)
@@ -69,12 +71,16 @@ contract IDO is IIDO {
         view
         override
         returns (address stablecoin)
-    {}
+    {
+        return _stablecoin;
+    }
 
     /**
      * @return token - returns the token address
      */
-    function getTokenAddress() external view override returns (address token) {}
+    function getTokenAddress() external view override returns (address token) {
+        return _token;
+    }
 
     /**
      * @return totalCoins - returns the amount of native coins that exchanged so far
@@ -103,5 +109,5 @@ contract IDO is IIDO {
      * @notice directly accept deposit in native coins. Exchange it to tokens and return them to sender's address
      * @notice that way a fornt end client is not necessary for investors. They can use their favourite wallet
      */
-    receive() external override payable {}
+    receive() external payable override {}
 }
