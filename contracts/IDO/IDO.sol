@@ -13,18 +13,21 @@ contract IDO is IIDO {
     address private _stablecoin; /* stablecoin address for the IDO. Used only for getting the rate between native coinand stablecoin */
     address private _panecakePool; /* panecake pool address between stablecoin and native coin */
     uint256 private _ratio; /* fixed ratio for the offering between stablcoin and native coin */
+    uint256 private _initialAmount; /* Initial amount of token for IDO */
 
     constructor(
         address __token,
         address __stablecoin,
         address __panecakePool,
-        uint256 __ratio
+        uint256 __ratio,
+        uint256 __initialAmount
     ) {
         _owner = msg.sender;
         _token = __token;
         _stablecoin = __stablecoin;
         _panecakePool = __panecakePool;
         _ratio = __ratio;
+        _initialAmount = __initialAmount;
     }
 
     /**
@@ -61,7 +64,9 @@ contract IDO is IIDO {
         view
         override
         returns (uint256 offeringRatio)
-    {}
+    {
+        return _initialAmount;
+    }
 
     /**
      * @return stablecoin - returns the stable coin address
