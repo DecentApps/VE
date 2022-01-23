@@ -18,8 +18,8 @@ contract IDO is IIDO {
     uint256 private _ratio; /* fixed ratio for the offering between stablcoin and native coin */
     uint256 private _initialAmount; /* Initial amount of token for IDO */
 
-    uint256 private totalCoinsExchanged;
-    uint256 private totalTokensOffered;
+    uint256 private _totalCoinsExchanged;
+    uint256 private _totalTokensOffered;
 
     constructor(
         address __token,
@@ -109,12 +109,16 @@ contract IDO is IIDO {
         view
         override
         returns (uint256 totalCoins)
-    {}
+    {
+        return _totalCoinsExchanged;
+    }
 
     /**
      * @return totalTokens - returns the amount of the token that was bought so far
      */
-    function totalOut() external view override returns (uint256 totalTokens) {}
+    function totalOut() external view override returns (uint256 totalTokens) {
+        return _totalTokensOffered;
+    }
 
     /**
      * @notice owner only - transfer native coins to owner's wallet
@@ -136,11 +140,11 @@ contract IDO is IIDO {
 
         require(maxTokens >= tokenAmount);
 
-        totalCoinsExchanged += msg.value;
+        _totalCoinsExchanged += msg.value;
 
         /* send the tokens to the caller */
         require(token.transfer(msg.sender, tokenAmount));
-        totalCoinsExchanged += tokenAmount;
+        _totalTokensOffered += tokenAmount;
 
         emit Exchanged(msg.sender, msg.value, tokenAmount);
     }
