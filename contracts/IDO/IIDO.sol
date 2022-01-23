@@ -61,7 +61,7 @@ interface IIDO {
     /**
      * @notice returns how many native coins received and how many tokens sent out
      */
-    event Exchanged(uint256 coins, uint256 tokens);
+    event Exchanged(address buyer, uint256 coins, uint256 tokens);
 
     /**
      * @notice native coin withdrawal
