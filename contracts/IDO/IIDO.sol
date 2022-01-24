@@ -7,11 +7,18 @@ pragma solidity ^0.8.0;
  */
 interface IIDO {
     /* Privileged functions */
+
     /**
      * @notice withdraw native coin
      * @notice owner only
      */
-    function withdraw(uint256) external;
+    function withdrawCoins(uint256) external payable;
+
+    /**
+     * @notice withdraw tokens (In case IDO can't be completed)
+     * @notice owner only
+     */
+    function withdrawTokens(uint256) external;
 
     /* Permissionless functions */
 
@@ -64,7 +71,7 @@ interface IIDO {
     event Exchanged(address buyer, uint256 coins, uint256 tokens);
 
     /**
-     * @notice native coin withdrawal
+     * @notice native coin or token withdrawal
      */
-    event Withdrawn(uint256 coins);
+    event Withdrawn(uint256 coins, bool isNative);
 }

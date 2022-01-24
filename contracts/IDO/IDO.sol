@@ -11,12 +11,12 @@ import "../BEP20/IBEP20.sol";
 contract IDO is IIDO {
     IBEP20 public token;
 
-    address private _owner; /* deployers' address*/
+    address payable private _owner; /* deployers' address*/
     address private _token; /* BEP20 token address for the IDO */
     address private _stablecoin; /* stablecoin address for the IDO. Used only for getting the rate between native coinand stablecoin */
     address private _panecakePool; /* panecake pool address between stablecoin and native coin */
     uint256 private _ratio; /* fixed ratio for the offering between stablcoin and native coin */
-    uint256 private _initialAmount; /* Initial amount of token for IDO */
+    uint256 private _initialAmount; /* Initial amount of tokens for IDO */
 
     uint256 private _totalCoinsExchanged;
     uint256 private _totalTokensOffered;
@@ -28,7 +28,7 @@ contract IDO is IIDO {
         uint256 __ratio,
         uint256 __initialAmount
     ) {
-        _owner = msg.sender;
+        _owner = payable(msg.sender);
         _token = __token;
         _stablecoin = __stablecoin;
         _panecakePool = __panecakePool;
@@ -125,7 +125,37 @@ contract IDO is IIDO {
      * @param _amount - how many native coins to withdraw. On zero , retrieve all avariable coins
      * @notice Emits an {Withdrawn} event.
      */
-    function withdraw(uint256 _amount) external override {}
+    function withdrawCoins(uint256 _amount) external payable override {
+        assert(msg.sender == _owner);
+        uint256 remainingCoins = address(this).balance;
+        require(remainingCoins > 0);
+        uint256 transferAmount = _amount;
+        if (_amount == 0 || _amount > remainingCoins) {
+            transferAmount = remainingCoins;
+        }
+
+        (bool successfulTransfer, ) = _owner.call{value: _amount}("");
+        require(successfulTransfer);
+        emit Withdrawn(transferAmount, true);
+    }
+
+    /**
+     * @notice owner only - transfer tokens to owner's wallet
+     * @param _amount - how many tokens to withdraw. On zero , retrieve all tokens left
+     * @notice Emits an {Withdrawn} event.
+     */
+    function withdrawTokens(uint256 _amount) external override {
+        assert(msg.sender == _owner);
+        uint256 remainingTokens = token.balanceOf(address(this));
+        require(remainingTokens > 0);
+        uint256 transferAmount = _amount;
+        if (_amount == 0 || _amount > remainingTokens) {
+            transferAmount = remainingTokens;
+        }
+
+        require(token.transfer(_owner, transferAmount));
+        emit Withdrawn(transferAmount, false);
+    }
 
     /**
      * @notice directly accept deposit in native coins. Exchange it to tokens and return them to sender's address
