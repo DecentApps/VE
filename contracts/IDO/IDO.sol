@@ -11,6 +11,7 @@ import "./IPancakeRouter02.sol";
  */
 contract IDO is IIDO {
     IBEP20 public token;
+    IPancakeRouter02 public router;
 
     address payable private _owner; /* deployers' address*/
     address private _token; /* BEP20 token address for the IDO */
@@ -40,16 +41,16 @@ contract IDO is IIDO {
 
     /**
      * @notice returns the current exchange rate using pancake swap (onchain oracle)
-     * @param _pool - address pool at pancake
+     * @param _amountIn - native coin amount
      * @return exRate - exchange rate between native coin and token
      */
-    function getCurrentRate(address _pool)
+    function getCurrentRate(uint256 _amountIn)
         external
         view
         override
         returns (uint256 exRate)
     {
-        return _getCurrentRate(_pool);
+        return _getCurrentRate(_amountIn);
     }
 
     /**
@@ -166,7 +167,7 @@ contract IDO is IIDO {
     receive() external payable override {
         require(msg.value > 0);
 
-        uint256 tokenAmount = _ratio * _getCurrentRate(_panecakePool); /* may overflow, inspect */
+        uint256 tokenAmount = _ratio * _getCurrentRate(msg.value); /* may overflow, inspect */
         uint256 maxTokens = token.balanceOf(address(this));
 
         require(maxTokens >= tokenAmount);
@@ -181,12 +182,15 @@ contract IDO is IIDO {
     }
 
     /* Internal functions */
-    function _getCurrentRate(address _pool)
+    function _getCurrentRate(uint256 amountIn)
         internal
         view
         returns (uint256 exRate)
     {
-        /* mockup */
-        return 1;
+        address[] memory path = new address[](2);
+        path[0] = router.WETH();
+        path[1] = _stablecoin;
+
+        return router.getAmountsIn(amountIn, path);
     }
 }

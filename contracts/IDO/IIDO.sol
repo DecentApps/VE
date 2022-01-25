@@ -56,7 +56,7 @@ interface IIDO {
      * @notice returns the current ratio between the native coin and the token
      * @notice uses onchain oracle for that
      */
-    function getCurrentRate(address) external view returns (uint256);
+    function getCurrentRate(uint256) external view returns (uint256);
 
     /**
      * @notice special recieve function to accept the native coin
