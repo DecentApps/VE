@@ -182,7 +182,7 @@ contract IDO is IIDO {
     }
 
     /* Internal functions */
-    function _getCurrentRate(uint256 amountIn)
+    function _getCurrentRate(uint256 _amountOut)
         internal
         view
         returns (uint256 exRate)
@@ -191,6 +191,6 @@ contract IDO is IIDO {
         path[0] = router.WETH();
         path[1] = _stablecoin;
 
-        return router.getAmountsIn(amountIn, path);
+        return router.getAmountsOut(_amountOut, path)[1];
     }
 }
