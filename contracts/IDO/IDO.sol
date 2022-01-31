@@ -14,9 +14,9 @@ contract IDO is IIDO {
     IPancakeRouter02 public router;
 
     address payable private _owner; /* deployers' address*/
-    address private _token; /* BEP20 token address for the IDO */
-    address private _stablecoin; /* stablecoin address for the IDO. Used only for getting the rate between native coinand stablecoin */
-    address private _panecakePool; /* panecake pool address between stablecoin and native coin */
+    address immutable private _token; /* BEP20 token address for the IDO */
+    address immutable private _stablecoin; /* stablecoin address for the IDO. Used only for getting the rate between native coinand stablecoin */
+    address immutable private _panecakePool; /* panecake pool address between stablecoin and native coin */
     uint256 private _ratio; /* fixed ratio for the offering between stablcoin and native coin */
     uint256 private _initialAmount; /* Initial amount of tokens for IDO */
 
@@ -36,7 +36,7 @@ contract IDO is IIDO {
         _panecakePool = __panecakePool;
         _ratio = __ratio;
         _initialAmount = __initialAmount;
-        token = IBEP20(_token);
+        token = IBEP20(__token);
     }
 
     /**
