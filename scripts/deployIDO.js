@@ -21,15 +21,18 @@ async function main() {
   const ido = await hre.ethers.getContractFactory("IDO");
 
   const vecAddr = process.env.VEC_ADDR;
-  const usdtAddr = "0x337610d27c682e347c9cd60bd4b3b107c9d34ddd";
-  const panecakePool =
-    "0x55d398326f99059ff775485246999027b3197955"; /* USDT/WBNB */
+  const usdtAddr = hre.config.networks[NETWORK].usdt;
+  const router = hre.config.networks[NETWORK].swapRouter;
+
+  /* USDT/WBNB */
+  const panecakePool = hre.config.networks[NETWORK].pool;
   const ratio = 1;
   const initialAmount = 1000 * 10 ** 8;
 
   const vecIDO = await ido.deploy(
     vecAddr,
     usdtAddr,
+    router,
     panecakePool,
     ratio,
     initialAmount
