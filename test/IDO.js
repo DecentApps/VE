@@ -14,6 +14,7 @@ describe("IDO for VEC smart contract", function () {
     const vecAddr = await vecIDO.getTokenAddress();
     const vecDecimals = 8;
     const bnbDecimals = 18;
+    const usdtDecimals = 6;
     const initallyOffered = await vecIDO.getInitialOffered();
     const ratio = await vecIDO.getFixedRate();
 
@@ -31,8 +32,8 @@ describe("IDO for VEC smart contract", function () {
     console.log(`BNB so far: ${coinsExchnged / 10 ** bnbDecimals} BNB`);
     console.log(`VEC distributed so far: ${vecSent / 10 ** vecDecimals} VEC`);
 
-    let currentRate = await vecIDO.getCurrentRate(1 * 10 ** vecDecimals);
-
+    let currentRate = await vecIDO.getCurrentRate(1 * 10 ** usdtDecimals);
+    currentRate /= 10 ** usdtDecimals;
     console.log(`Current rate : ${currentRate}`);
   });
 });

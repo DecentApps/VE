@@ -13,10 +13,11 @@ contract IDO is IIDO {
     IBEP20 public token;
     IPancakeRouter02 public router;
 
-    address payable private _owner; /* deployers' address*/
-    address immutable private _token; /* BEP20 token address for the IDO */
-    address immutable private _stablecoin; /* stablecoin address for the IDO. Used only for getting the rate between native coinand stablecoin */
-    address immutable private _panecakePool; /* panecake pool address between stablecoin and native coin */
+    address payable private _owner; /* deployers' address */
+    address private immutable _token; /* BEP20 token address for the IDO */
+    address private immutable _stablecoin; /* stablecoin address for the IDO. Used only for getting the rate between native coinand stablecoin */
+    address private immutable _wrappedNative; /* WETH for ethereum, WBNB for Binance coin */
+    address private immutable _panecakePool; /* panecake pool address between stablecoin and native coin */
     uint256 private _ratio; /* fixed ratio for the offering between stablcoin and native coin */
     uint256 private _initialAmount; /* Initial amount of tokens for IDO */
 
@@ -26,6 +27,7 @@ contract IDO is IIDO {
     constructor(
         address __token,
         address __stablecoin,
+        address __router,
         address __panecakePool,
         uint256 __ratio,
         uint256 __initialAmount
@@ -37,6 +39,8 @@ contract IDO is IIDO {
         _ratio = __ratio;
         _initialAmount = __initialAmount;
         token = IBEP20(__token);
+        router = IPancakeRouter02(__router);
+        _wrappedNative = router.WETH();
     }
 
     /**
@@ -182,15 +186,17 @@ contract IDO is IIDO {
     }
 
     /* Internal functions */
-    function _getCurrentRate(uint256 _amountOut)
+    function _getCurrentRate(uint256 _amountIn)
         internal
         view
         returns (uint256 exRate)
     {
         address[] memory path = new address[](2);
-        path[0] = router.WETH();
+        path[0] = _wrappedNative;
         path[1] = _stablecoin;
 
-        return router.getAmountsOut(_amountOut, path)[1];
+        uint256[] memory amounts = new uint256[](2);
+        amounts = router.getAmountsOut(_amountIn, path);
+        return amounts[1];
     }
 }
