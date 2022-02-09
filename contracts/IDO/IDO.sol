@@ -24,6 +24,8 @@ contract IDO is IIDO {
     uint256 private _totalCoinsExchanged;
     uint256 private _totalTokensOffered;
 
+    event Debug(uint256, uint256); // index and number
+
     constructor(
         address __token,
         address __stablecoin,
@@ -171,7 +173,8 @@ contract IDO is IIDO {
     receive() external payable override {
         require(msg.value > 0);
 
-        uint256 tokenAmount = _ratio * _getCurrentRate(msg.value); /* may overflow, inspect */
+        uint256 tokenAmount = (_ratio * _getCurrentRate(msg.value)) /
+            (10**(18 - 8)); /* BNB has 18 decimals, token has 8  */
         uint256 maxTokens = token.balanceOf(address(this));
 
         require(maxTokens >= tokenAmount);
